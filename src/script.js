@@ -43,7 +43,18 @@ const initBuffers = (gl) => {
 
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-  return { position: positionBuffer };
+  const indexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+
+  const indices = [0, 1, 2, 1, 2, 3];
+
+  gl.bufferData(
+    gl.ELEMENT_ARRAY_BUFFER,
+    new Uint16Array(indices),
+    gl.STATIC_DRAW
+  );
+
+  return { position: positionBuffer, indices: indexBuffer, indexBufferLength: indices.length };
 };
 
 const main = () => {
@@ -62,7 +73,10 @@ const main = () => {
   const stride = 0; // how many bytes to get from one set of values to the next
   // 0 = use type and numComponents above
   const offset = 0; // how many bytes inside the buffer to start from
+
   gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+
   gl.vertexAttribPointer(
     programInfo.attributes.coordinate,
     numComponents,
@@ -77,7 +91,7 @@ const main = () => {
   
   const draw = () => {
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    gl.drawElements(gl.TRIANGLES, buffers.indexBufferLength, gl.UNSIGNED_SHORT, 0);
   }
 
   draw();
