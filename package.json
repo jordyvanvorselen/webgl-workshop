@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "source": "src/index.html",
+  "scripts": {
+    "start": "parcel"
+  },
   "devDependencies": {
     "parcel": "^2.5.0"
   }
